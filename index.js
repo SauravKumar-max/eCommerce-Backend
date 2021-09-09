@@ -3,14 +3,16 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-const productsData = require("./db/data"); 
 const  pageNotFound  = require("./middleware/pageNotFound");
 const internalSeverError = require("./middleware/internalServerError");
 const { initializeDBConnection } = require("./db/db.connect");
+const authVerify = require('./middleware/authVerify');
 
 const productsRouter = require("./routes/products.route");
 const cartsRouter = require("./routes/carts.route");
-const wishlistRouter = require("./routes/wishlists.route")
+const wishlistRouter = require("./routes/wishlists.route");
+const userRouter = require('./routes/user.route');
+
 
 
 app.use(cors());
@@ -24,8 +26,9 @@ app.get('/', (req, res) => {
 
 
 app.use('/products', productsRouter);
-app.use('/carts', cartsRouter);
-app.use('/wishlists', wishlistRouter);
+app.use('/carts', authVerify, cartsRouter);
+app.use('/wishlists', authVerify, wishlistRouter);
+app.use('/user', userRouter);
 
 
 // ** Note: DO NOT MOVE (This should be last Route) **
