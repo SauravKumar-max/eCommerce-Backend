@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 
 async function initializeDBConnection(){
+	const mySecret = process.env['compassPassword'];
 
 	try{
-		const uri = "mongodb+srv://dbSaurav:Jamesbond@007@cluster0.iha7u.mongodb.net/inventory?retryWrites=true&w=majority";
+		const uri = `mongodb+srv://db${mySecret}@cluster0.iha7u.mongodb.net/inventory?retryWrites=true&w=majority`;
 
 		await mongoose.connect(uri, { 
 			useUnifiedTopology: true ,
 			useNewUrlParser: true,
+			useFindAndModify: false
   	});
 
 		console.log("Connection Completed");
